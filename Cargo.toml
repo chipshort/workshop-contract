@@ -35,6 +35,7 @@ optimize = """docker run --rm -v "$(pwd)":/code \
 cosmwasm-schema = "2.0.1"
 cosmwasm-std = { version = "2.0.1", features = [
   "cosmwasm_1_3",
+  "staking",
   # Enable this if you only deploy to chains that have CosmWasm 1.4 or higher
   # "cosmwasm_1_4",
 ] }
@@ -43,6 +44,7 @@ cw2 = "2.0.0"
 schemars = "0.8.16"
 serde = { version = "1.0.197", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.58" }
+validator = { version = "0.18.1", features = ["derive"] }
 
 [dev-dependencies]
 cw-multi-test = "2.0.0"

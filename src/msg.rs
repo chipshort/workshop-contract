@@ -1,5 +1,6 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
 use cosmwasm_std::Coin;
+use validator::Validate;
 
 use crate::state::Metadata;
 
@@ -11,9 +12,19 @@ pub struct InstantiateMsg {
 
 #[cw_serde]
 pub enum ExecuteMsg {
-    Register { name: String, metadata: Metadata },
+    Register(RegistrationMsg),
     Transfer { name: String, to: String },
-    Change { name: String, metadata: Metadata },
+    SendFundsTo { name: String },
+    // ... Change, etc.
+}
+
+#[cw_serde]
+#[derive(Validate)]
+pub struct RegistrationMsg {
+    #[validate(length(min = 3, max = 64))]
+    pub name: String,
+    #[validate(nested)]
+    pub metadata: Metadata,
 }
 
 #[cw_serde]
@@ -28,11 +39,11 @@ pub enum QueryMsg {
         limit: Option<u32>,
     },
 
-    #[returns(cosmwasm_std::ValidatorResponse)]
+    #[returns(cosmwasm_std::Validator)]
     QueryValidatorInfo { name: String },
 }
 
 #[cw_serde]
-struct EntryListResponse {
-    entries: Vec<crate::state::Entry>,
+pub struct EntryListResponse {
+    pub entries: Vec<(String, crate::state::Entry)>,
 }

@@ -1,6 +1,7 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Coin};
 use cw_storage_plus::{Item, Map};
+use validator::Validate;
 
 #[cw_serde]
 pub struct Config {
@@ -15,7 +16,9 @@ pub struct Entry {
 }
 
 #[cw_serde]
+#[derive(Validate)]
 pub struct Metadata {
+    #[validate(url)]
     pub url: Option<String>,
     pub validator_address: Option<String>,
     // ...
